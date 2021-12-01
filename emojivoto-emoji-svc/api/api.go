@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/buoyantio/emojivoto/emojivoto-emoji-svc/emoji"
-	pb "github.com/buoyantio/emojivoto/emojivoto-emoji-svc/gen/proto"
+	pb "github.com/buoyantio/emojivoto/emojivoto-web/gen/proto"
 	"google.golang.org/grpc"
 )
 
 type EmojiServiceServer struct {
 	allEmoji emoji.AllEmoji
+	pb.UnimplementedEmojiServiceServer
 }
 
 func (svc *EmojiServiceServer) ListAll(ctx context.Context, req *pb.ListAllEmojiRequest) (*pb.ListAllEmojiResponse, error) {
@@ -45,5 +46,6 @@ func (svc *EmojiServiceServer) FindByShortcode(ctx context.Context, req *pb.Find
 func NewGrpServer(grpcServer *grpc.Server, allEmoji emoji.AllEmoji) {
 	pb.RegisterEmojiServiceServer(grpcServer, &EmojiServiceServer{
 		allEmoji,
+		pb.UnimplementedEmojiServiceServer{},
 	})
 }

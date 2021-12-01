@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/buoyantio/emojivoto/emojivoto-emoji-svc/emoji"
-	pb "github.com/buoyantio/emojivoto/emojivoto-emoji-svc/gen/proto"
+	pb "github.com/buoyantio/emojivoto/emojivoto-web/gen/proto"
 )
 
 func TestListAll(t *testing.T) {

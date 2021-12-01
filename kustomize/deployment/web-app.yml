@@ -27,24 +27,18 @@ spec:
     spec:
       serviceAccountName: web-app
       containers:
-      - env:
-        - name: WEB_PORT
-          value: "80"
-        - name: EMOJISVC_HOST
-          value: emoji-svc.emojivoto:8080
-        - name: VOTINGSVC_HOST
-          value: voting-svc.emojivoto:8080
-        - name: INDEX_BUNDLE
-          value: dist/index_bundle.js
-        image: docker.io/datawire/emojivoto-web-app:v0
-        imagePullPolicy: Always
-        name: web-app
-        ports:
-        - containerPort: 80
-          name: http
-        resources:
-          requests:
-            cpu: 100m
+        - env:
+            - name: WEB_PORT
+              value: "80"
+          image: docker.io/njpowell/emojivoto-web-app:v11.1
+          imagePullPolicy: Always
+          name: web-app
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              cpu: 100m
 ---
 apiVersion: v1
 kind: Service
@@ -55,7 +49,8 @@ spec:
   type: ClusterIP
   selector:
     app: web-app
+    version: v0
   ports:
-  - name: http
-    port: 80
-    targetPort: 80
+    - name: http
+      port: 80
+      targetPort: 80

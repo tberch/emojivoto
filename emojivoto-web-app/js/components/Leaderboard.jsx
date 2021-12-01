@@ -1,8 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
-import 'whatwg-fetch';
+//import 'whatwg-fetch';
 import { Link } from 'react-router-dom';
 
+const WEB_SVC_URL = `http://web-svc.emojivoto:8080`
 export default class Leaderboard extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +17,7 @@ export default class Leaderboard extends React.Component {
   }
 
   loadFromServer(emoji) {
-    fetch( `/api/leaderboard`).then(r => {
+    fetch(`${WEB_SVC_URL}/api/leaderboard`).then(r => {
       r.json().then(emojis => {
         this.setState({
           leaderboard: emojis
@@ -30,7 +31,7 @@ export default class Leaderboard extends React.Component {
       return (
         <div className="emoji" key={`emoji-${i}`} title={`${emoji.votes} votes`}>
           <div>{emoji.unicode}</div>
-          { emoji.votes > 0 ? <div className="counter">{emoji.votes}</div> : null}
+          {emoji.votes > 0 ? <div className="counter">{emoji.votes}</div> : null}
         </div>
       );
     });

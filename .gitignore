@@ -2,3 +2,6 @@
 **/target
 **/gen
 vendor
+**/node_modules
+**/dist
+**yarn.lock

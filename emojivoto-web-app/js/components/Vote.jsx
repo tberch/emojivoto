@@ -1,9 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-import 'whatwg-fetch';
+//import 'whatwg-fetch';
 
-const EmojiVotoPage = ({headline, contents, containerClass, preHeadline}) => {
+const WEB_SVC_URL = `http://web-svc.emojivoto:8080`
+
+const EmojiVotoPage = ({ headline, contents, containerClass, preHeadline }) => {
   return (
     <div className={containerClass}>
       <div className="page-content container-fluid">
@@ -31,13 +33,13 @@ export default class Vote extends React.Component {
   }
 
   loadFromServer() {
-    fetch(`/api/list`).then(rsp => {
+    fetch(`${WEB_SVC_URL}/api/list`).then(rsp => {
       rsp.json().then(r => {
         this.setState({ emojiList: r })
       }).catch(e => {
-        this.setState( {error: e.statusText });
+        this.setState({ error: e.statusText });
       }).catch(e => {
-        this.setState( {error: e.statusText });
+        this.setState({ error: e.statusText });
       });
     });
   }
@@ -47,15 +49,15 @@ export default class Vote extends React.Component {
   }
 
   vote(emoji) {
-    fetch(`/api/vote?choice=${emoji.shortcode}`).then(rsp => {
+    fetch(`${WEB_SVC_URL}/api/vote?choice=${emoji.shortcode}`).then(rsp => {
       if (rsp.ok) {
         this.setState({ selectedEmoji: emoji, error: null });
       } else {
         throw new Error("Unable to Register Vote");
       }
     }).catch(e => {
-        this.setState({ selectedEmoji: emoji, error: e.toString() });
-      });
+      this.setState({ selectedEmoji: emoji, error: e.toString() });
+    });
   }
 
   resetState() {
@@ -83,7 +85,7 @@ export default class Vote extends React.Component {
   render() {
     if (this.state.error) {
       let errorMessage = <p>We couldn't process your request.</p>;
-      if(this.state.selectedEmoji.shortcode === ":doughnut:") {
+      if (this.state.selectedEmoji.shortcode === ":doughnut:") {
         errorMessage = (<div>
           <p className="doughnut-explanation">Sorry, currently unable to vote for 🍩.<br />
             Please go back and choose another emoji.
@@ -93,9 +95,9 @@ export default class Vote extends React.Component {
       }
 
       let contents = (
-          <div>
-            {errorMessage}
-          </div>
+        <div>
+          {errorMessage}
+        </div>
       );
 
       return contents;
@@ -131,7 +133,7 @@ export default class Vote extends React.Component {
         preHeadline={<h1>You picked:</h1>}
         headline={this.state.selectedEmoji.unicode}
         contents={contents}
-        containerClass ="background"
+        containerClass="background"
       />;
     }
   }

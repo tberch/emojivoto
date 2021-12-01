@@ -5,7 +5,7 @@ include ./common.mk
 all: build integration-tests
 
 build-base-docker-image:
-	docker build . -f Dockerfile-base -t "datawire/emojivoto-svc-base:$(IMAGE_TAG)"
+	docker build . -f Dockerfile-base -t "njpowell/emojivoto-svc-base:$(IMAGE_TAG)"
 
 web:
 	$(MAKE) -C emojivoto-web
@@ -35,7 +35,7 @@ build: web web-app emoji-svc voting-svc
 
 build-ui: build-container-ui
 
-local: web-local web-app-local emoji-svc-local voting-svc-local
+local: web-local web-app-local emoji-svc-local voting-svc-local test
 
 multi-arch:
 	$(MAKE) -C emojivoto-web build-multi-arch
@@ -58,6 +58,6 @@ deploy-to-docker-compose:
 	docker-compose -f ./docker-compose.yml up -d
 
 push-%:
-	docker push datawire/emojivoto-$*:$(IMAGE_TAG)
+	docker push njpowell/emojivoto-$*:$(IMAGE_TAG)
 
-push: push-svc-base push-emoji-svc push-voting-svc push-web push-web-app
+push: push-emoji-svc push-voting-svc push-web push-web-app
