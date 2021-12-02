@@ -14,7 +14,7 @@ import (
 	"github.com/buoyantio/emojivoto/emojivoto-voting-svc/voting"
 
 	"contrib.go.opencensus.io/exporter/ocagent"
-	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/trace"
@@ -30,7 +30,8 @@ var (
 func main() {
 
 	if grpcPort == "" {
-		log.Fatalf("GRPC_PORT (currently [%s]) environment variable must me set to run the server.", grpcPort)
+		//log.Fatalf("GRPC_PORT (currently [%s]) environment variable must me set to run the server.", grpcPort)
+		grpcPort = "8080"
 	}
 
 	oce, err := ocagent.NewExporter(
