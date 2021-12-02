@@ -13,7 +13,7 @@ func main() {
 	addr := "localhost:8080"
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
-		print(err.Error())
+		os.Stdout.WriteString(err.Error())
 		os.Exit(1)
 	}
 	client := pb.NewVotingServiceClient(conn)
@@ -21,8 +21,8 @@ func main() {
 	defer cancel()
 	_, err = client.VoteDoughnut(ctx, &pb.VoteRequest{})
 	if err != nil {
-		print(err.Error())
+		os.Stdout.WriteString(err.Error())
 		os.Exit(1)
 	}
-	print("Success")
+	os.Stdout.WriteString("Success")
 }
