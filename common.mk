@@ -1,6 +1,6 @@
 export IMAGE_TAG := v11.1
 
-.PHONY: package protoc test
+.PHONY: package protoc test votecli
 
 target_dir := target
 
@@ -35,3 +35,6 @@ test:
 
 run:
 	go run cmd/server.go
+
+votecli:
+	GOOS=darwin go build -trimpath -o build/darwin/votecli client/cmd/client.go
