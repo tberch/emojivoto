@@ -5,66 +5,72 @@ const dotenv = require('dotenv').config( {
   path: path.join(__dirname, '.env')
 } );
 
-module.exports = {
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  entry: './js/index.js',
-  cache: false,
-  plugins:
-    [
-      new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, "index.html")
-      }),
-      new webpack.DefinePlugin( {
-        "process.env": dotenv.parsed
-      } ),
+module.exports = (env, argv) => {
+  return {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    entry: './js/index.js',
+    cache: false,
+    plugins:
+      [
+        new HtmlWebpackPlugin({
+          template: path.resolve(__dirname, "index.html")
+        }),
+        new webpack.DefinePlugin({
+          "process.env": dotenv.parsed
+        }),
 
-    ],
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    watchContentBase: true,
-    compress: true,
-    disableHostCheck: true,
-    port: 8080,
-    historyApiFallback: {
-      rewrites: [
-        {from: /^\/leaderboard/, to: 'index.html'},
-      ]
-    },
-  },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: 'dist/',
-    filename: 'index_bundle.js'
-  },
-  // devtool: 'inline-cheap-source-map', // uncomment for nicer logging, makes dev slower
-  externals: {
-    cheerio: 'window',
-    'react/addons': 'react',
-    'react/lib/ExecutionEnvironment': 'react',
-    'react/lib/ReactContext': 'react',
-    'react-addons-test-utils': 'react-dom',
-  },
-  module: {
-    rules: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
-      {
-        test: /\.css$/,
-        use: [
-          'style-loader',
-          { loader: 'css-loader', options: { importLoaders: 1 } },
-          'postcss-loader'
+      ],
+    devServer: {
+      contentBase: path.join(__dirname, 'dist'),
+      writeToDisk: true,
+      watchContentBase: true,
+      compress: true,
+      disableHostCheck: true,
+      port: 8080,
+      historyApiFallback: {
+        rewrites: [
+          { from: /^\/leaderboard/, to: 'index.html' },
         ]
       },
-      {
-        test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: { publicPath: 'dist/' }
-          }
-        ]
-      }
-    ]
-  }
+      proxy: {
+        '/api': 'http://localhost:8080'
+      },
+    },
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      publicPath: 'dist/',
+      filename: 'index_bundle.js'
+    },
+    // devtool: 'inline-cheap-source-map', // uncomment for nicer logging, makes dev slower
+    externals: {
+      cheerio: 'window',
+      'react/addons': 'react',
+      'react/lib/ExecutionEnvironment': 'react',
+      'react/lib/ReactContext': 'react',
+      'react-addons-test-utils': 'react-dom',
+    },
+    module: {
+      rules: [
+        { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+        { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
+        {
+          test: /\.css$/,
+          use: [
+            'style-loader',
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            'postcss-loader'
+          ]
+        },
+        {
+          test: /\.(png|jpg|gif|eot|svg|ttf|woff|woff2)$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: { publicPath: 'dist/' }
+            }
+          ]
+        }
+      ]
+    }
+  };
 }
